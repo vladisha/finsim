@@ -10,16 +10,17 @@ import pandas as pd
 import glob
 import random as rnd
 import time
+sys.path.insert(0, r'../')
+import Preferencies as pref
 
-
-files = glob.glob(os.path.join('..\\Data2', '*.csv'))
+files = glob.glob(os.path.join(pref.Preferencies.PATH_DATA_FOLDER , '*.csv'))
 
 rnd.shuffle(files)
 
 df = pd.DataFrame()
 result = []
 tickers = []
-for index in range (0, 3):
+for index in range (0, len(files)):
     print (files[index] + " ")
     result.append(files[index])
     mystr =  files[index]

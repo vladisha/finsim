@@ -234,22 +234,53 @@ class PreprocessShare (object):
            #self.HL(df,[yesterday1,yesterday3])
            #self.HLmid(df,[yesterday1])
            #self.ALast([sa.OPEN],df,[3,5,10])
-           self.BB(df,[20])
+           
            #self.HB(df,[20])
            #self.LB(df,[20])
             
-            
+           #self.HOOL(df,[1])
+           #self.COOL(df,[1])  
            #self.SubOMA(df,[3,5,10])
            #self.MinL([sa.OPEN,sa.HL+str(1)],df,[2,3,5])
            #self.MaxL([sa.OPEN,sa.HL+str(1)],df,[2,3,5])
-           self.Grad([sa.OPEN],df)
-           self.BOB(df,[20])
-            
-            
-           #self.HOOL(df,[1])
-           #self.COOL(df,[1])
-            
-            
+           #self.Grad([sa.OPEN],df)
+           #self.BB(df,[20]) 
+           #self.BOB(df,[20]) 
+           
+           df['Oavg']= df[sa.OPEN].rolling(3).mean()
+           df['T1d']= df[sa.OPEN] - df[sa.OPEN].shift(1)
+           df['T3d']= df[sa.OPEN] - df[sa.OPEN].shift(3) 
+           df['T10d']= df[sa.OPEN] - df['Oavg'].shift(10)
+           
+           df['T1d']= df['T1d'].fillna(0) 
+           df['T3d']= df['T3d'].fillna(0) 
+           df['T10d']= df['T10d'].fillna(0) 
+               
+           c1 = (df['T10d']>0)
+           c2 = (df['T3d']<0)
+           c3 = (df['T3d'].shift(1)<0)
+           c4 = (df['T3d'].shift(2)<0)
+           c5 = (df['T1d']>0)
+           c6 = (df['T1d'].shift(1)<0)
+           
+           
+           df['Long_Score']= ( c1 & c2 & c3 & c4 & c5 & c6 ) 
+           # Future
+           df['N1d']= df[sa.OPEN].shift(-1) - df[sa.OPEN]
+           df['N1dTrue']= df['N1d'][df['Long_Score']==True]
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
            yesterday1=0    
            today=-1  
            next1day=-2 
